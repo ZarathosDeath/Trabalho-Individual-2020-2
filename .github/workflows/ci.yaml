@@ -38,7 +38,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
       - name: Check Syntax # check code formatting
-        run: pycodestyle --statistics /api
+        run: docker-compose run api run --source='.' pycodestyle --statistics .
       - name: Run Migrations # run migrations to create table in side car db container
         run: docker-compose run api run --source='.' python3 manage.py migrate
       - name: Run Test # running tests
