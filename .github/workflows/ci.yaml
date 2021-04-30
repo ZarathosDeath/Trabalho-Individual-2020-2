@@ -40,9 +40,9 @@ jobs:
       - name: Check Syntax # check code formatting
         run: docker-compose run api pycodestyle --statistics .
       - name: Run Migrations # run migrations to create table in side car db container
-        run: docker-compose run api run --source='.' python3 manage.py migrate
+        run: docker-compose run api python3 manage.py migrate
       - name: Run Test # running tests
-        run: python3 api/manage.py test
+        run: docker-compose run api python3 manage.py test
 
   package-job: # package job for building and publishing docker images
     runs-on: ubuntu-latest
