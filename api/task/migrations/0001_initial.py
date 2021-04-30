@@ -14,9 +14,15 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Task',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=240, verbose_name='Title')),
-                ('description', models.CharField(max_length=240, verbose_name='Title')),
+                ('id', models.BigAutoField(
+                    auto_created=True,
+                    primary_key=True,
+                    serialize=False,
+                    verbose_name='ID')),
+                ('title', models.CharField(
+                    max_length=240, verbose_name='Title')),
+                ('description', models.CharField(
+                    max_length=240, verbose_name='Title')),
                 ('created', models.DateField(auto_now_add=True)),
             ],
         ),
