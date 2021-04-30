@@ -37,10 +37,6 @@ jobs:
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
-      - name: Setup python environment
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
       - name: Check Python version
         run: python --version
       - name: Install requirements # install application requirements
@@ -48,9 +44,9 @@ jobs:
       - name: Check Syntax # check code formatting
         run: pycodestyle --statistics .
       - name: Run Migrations # run migrations to create table in side car db container
-        run: python api/manage.py migrate
+        run: python3 api/manage.py migrate
       - name: Run Test # running tests
-        run: python api/manage.py test
+        run: python3 api/manage.py test
 
   package-job: # package job for building and publishing docker images
     runs-on: ubuntu-latest
