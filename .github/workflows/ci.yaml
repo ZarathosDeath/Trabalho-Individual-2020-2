@@ -81,7 +81,7 @@ jobs:
         docker-compose build
     - name: Publish
       run: |-
-        docker push tag trabalho-individual-2020-2_api "gcr.io/${{ secrets.GKE_PROJECT_ID }}/api"
+        docker tag trabalho-individual-2020-2_api "gcr.io/${{ secrets.GKE_PROJECT_ID }}/api" && gcloud docker push "gcr.io/${{ secrets.GKE_PROJECT_ID }}/api"
     - name: Deploy
       run: |-
           ./kustomize edit set image gcr.io/PROJECT_ID/IMAGE:TAG=gcr.io/${{ secrets.GKE_PROJECT_ID }}/api:$GITHUB_SHA
