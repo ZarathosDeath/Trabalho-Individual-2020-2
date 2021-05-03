@@ -81,10 +81,10 @@ jobs:
         docker-compose build
     - name: Publish
       run: |-
-        docker-compose push "gcr.io/${{ secrets.GKE_PROJECT }}/$IMAGE:$GITHUB_SHA"
+        docker-compose push "gcr.io/${{ secrets.GKE_PROJECT_ID }}/$IMAGE:$GITHUB_SHA"
     - name: Deploy
       run: |-
-          ./kustomize edit set image gcr.io/PROJECT_ID/IMAGE:TAG=gcr.io/${{ secrets.GKE_PROJECT }}/api:$GITHUB_SHA
+          ./kustomize edit set image gcr.io/PROJECT_ID/IMAGE:TAG=gcr.io/${{ secrets.GKE_PROJECT_ID }}/api:$GITHUB_SHA
           ./kustomize build . | kubectl apply -f -
           kubectl rollout status deployment/egcs
           kubectl get services -o wide
@@ -103,7 +103,7 @@ jobs:
           service_account_key: ${{ secrets.GKE_PASSWORD }} # service account file.
       - name: Set Repo Location # steps required to find the image id of our image from contiainer registry
         id: repo
-        run: echo "::set-output name=repo_name::gcr.io/${{secrets.GKE_PROJECT}}/trabalho-individual-2020-2/api:sha-$(git rev-parse --short HEAD)" # we are setting the image location as output to be used in later step
+        run: echo "::set-output name=repo_name::gcr.io/${{secrets.GKE_PROJECT_ID}}/trabalho-individual-2020-2/api:sha-$(git rev-parse --short HEAD)" # we are setting the image location as output to be used in later step
       - name: Check Repo Location
         run: echo ${{ steps.repo.outputs.repo_name }} # checking our repo location
       - name: Install Helm # helm installation in our runner for deploying.
@@ -113,7 +113,7 @@ jobs:
           ./get_helm.sh
       - name: Connect to kubernetes cluster
         run: |
-          gcloud container clusters get-credentials ${{secrets.GKE_CLUSTER}} --zone ${{secrets.GKE_ZONE}} --project ${{secrets.GKE_PROJECT}}
+          gcloud container clusters get-credentials ${{secrets.GKE_CLUSTER}} --zone ${{secrets.GKE_ZONE}} --project ${{secrets.GKE_PROJECT_ID}}
       - name: Helm Deploy # deploying our helm chart to our cluster
         run: >
           helm upgrade
