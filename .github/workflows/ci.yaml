@@ -53,12 +53,12 @@ jobs:
       - name: Build & Publish Image # we are using a public GitHub Action to build and publish docker image to our GCR registry.
         uses: docker/build-push-action@v1
         env:
-          app_name: app
+          app_name: api
         with:
           username: _json_key # default for gcr.io
           password: ${{ secrets.GKE_PASSWORD }} # service account file to be set as secret
           registry: gcr.io # gcr registry domain
-          repository: ${{secrets.GKE_PROJECT}}/trabalho-individual-2020-2/ # GKE_PROJECT is out GCP Project id to be set as secret.
+          repository: ${{secrets.GKE_PROJECT}}/trabalho-individual-2020-2/api # GKE_PROJECT is out GCP Project id to be set as secret.
           tag_with_sha: true # this will tag our image with commit id. For example our image our be gcr.io/project-id/github-django-actions/app:sha-7865423 where 7865423 is the short sha of our commit.
 
   deploy-job: # deploy job is for deploying our code to google cloud cluster.
