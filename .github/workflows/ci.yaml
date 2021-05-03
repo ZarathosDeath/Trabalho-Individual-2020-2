@@ -85,12 +85,6 @@ jobs:
     - name: Publish
       run: |-
         docker push "gcr.io/${{ secrets.GKE_PROJECT_ID }}/api"
-    - name: Deploy
-      run: |-
-          ./kustomize edit set image gcr.io/PROJECT_ID/IMAGE:TAG=gcr.io/${{ secrets.GKE_PROJECT_ID }}/api:$GITHUB_SHA
-          ./kustomize build . | kubectl apply -f -
-          kubectl rollout status deployment/egcs
-          kubectl get services -o wide
 
   deploy-job: # deploy job is for deploying our code to google cloud cluster.
     runs-on: ubuntu-latest
@@ -106,7 +100,7 @@ jobs:
           service_account_key: ${{ secrets.GKE_PASSWORD }} # service account file.
       - name: Set Repo Location # steps required to find the image id of our image from contiainer registry
         id: repo
-        run: echo "::set-output name=repo_name::gcr.io/${{secrets.GKE_PROJECT_ID}}/trabalho-individual-2020-2/api:sha-$(git rev-parse --short HEAD)" # we are setting the image location as output to be used in later step
+        run: echo "::set-output name=repo_name::gcr.io/${{secrets.GKE_PROJECT_ID}}/trabalho-individual-2020-2:sha-$(git rev-parse --short HEAD)" # we are setting the image location as output to be used in later step
       - name: Check Repo Location
         run: echo ${{ steps.repo.outputs.repo_name }} # checking our repo location
       - name: Install Helm # helm installation in our runner for deploying.
