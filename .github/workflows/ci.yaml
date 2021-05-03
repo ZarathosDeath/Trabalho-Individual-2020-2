@@ -96,7 +96,7 @@ jobs:
       run: |-
         kustomize edit set image gcr.io/PROJECT_ID/IMAGE:TAG=gcr.io/${{ secrets.GKE_PROJECT_ID }}/api
         kustomize build . | kubectl apply -f -
-        kubectl rollout status deployment/api-kubernetes-deploy
+        kubectl rollout status deployment/api
         kubectl get services -o wide
 
   # deploy-job: # deploy job is for deploying our code to google cloud cluster.
