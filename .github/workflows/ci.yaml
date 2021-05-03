@@ -73,8 +73,8 @@ jobs:
         gcloud --quiet auth configure-docker
     - uses: google-github-actions/get-gke-credentials@v0.2.1
       with:
-        cluster_name: cluster-1
-        location: ${{ env.GKE_ZONE }}
+        cluster_name: ${{ secrets.GKE_CLUSTER }}
+        location: ${{ secrets.GKE_ZONE }}
         credentials: ${{ secrets.GKE_PROJECT }}
     - name: Build
       run: |-
