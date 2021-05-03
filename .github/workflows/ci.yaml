@@ -78,13 +78,10 @@ jobs:
         credentials: ${{ secrets.GKE_PROJECT }}
     - name: Build
       run: |-
-        docker build \
-          --tag "gcr.io/${{ secrets.GKE_PROJECT }}/api:$GITHUB_SHA" \
-          --build-arg GITHUB_SHA="$GITHUB_SHA" \
-          --build-arg GITHUB_REF="$GITHUB_REF" \
+        docker-compose build
     - name: Publish
       run: |-
-          docker push "gcr.io/${{ secrets.GKE_PROJECT }}/$IMAGE:$GITHUB_SHA"
+        docker-compose push "gcr.io/${{ secrets.GKE_PROJECT }}/$IMAGE:$GITHUB_SHA"
     - name: Deploy
       run: |-
           ./kustomize edit set image gcr.io/PROJECT_ID/IMAGE:TAG=gcr.io/${{ secrets.GKE_PROJECT }}/api:$GITHUB_SHA
