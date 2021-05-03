@@ -94,8 +94,8 @@ jobs:
     # Deploy the Docker image to the GKE cluster
     - name: Deploy
       run: |-
-        ./kustomize edit set image gcr.io/PROJECT_ID/IMAGE:TAG=gcr.io/${{ secrets.GKE_PROJECT_ID }}/api
-        ./kustomize build . | kubectl apply -f -
+        kustomize edit set image gcr.io/PROJECT_ID/IMAGE:TAG=gcr.io/${{ secrets.GKE_PROJECT_ID }}/api
+        kustomize build . | kubectl apply -f -
         kubectl rollout status deployment/api-kubernetes-deploy
         kubectl get services -o wide
 
