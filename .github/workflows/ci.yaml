@@ -31,7 +31,7 @@ jobs:
       - name: Run Migrations # run migrations to create table in side car db container
         run: docker-compose run api python3 manage.py migrate
       - name: Run Test # running tests
-        run: docker-compose run api python3 manage.py test
+        run: docker-compose run api coverage run --source="." --omit="manage.py" manage.py test
       - name: Run Coverage # running tests
         run: docker-compose run api coverage report --fail-under=85
 
