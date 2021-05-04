@@ -41,7 +41,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: build client # checking our the code at current commit that triggers the workflow
-        run: docker-compose up --build -d client
+        run: docker-compose up --build -d app
       - name: Cache dependency # caching dependency will make our build faster.
         uses: actions/cache@v2
         with:
@@ -50,11 +50,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
       - name: Check Syntax # check code formatting
-        run: docker-compose run client yarn lint
+        run: docker-compose run app yarn lint
       - name: Run Test # running tests
-        run: docker-compose run client npm run test:unit:ci
+        run: docker-compose run app npm run test:unit:ci
       - name: Run Test # running tests
-        run: docker-compose run client npm run test:unit:coverage
+        run: docker-compose run app npm run test:unit:coverage
 
   package-job:
     name: package
