@@ -30,10 +30,10 @@ jobs:
         run: docker-compose run api pycodestyle --statistics .
       - name: Run Migrations # run migrations to create table in side car db container
         run: docker-compose run api python3 manage.py migrate
-      - name: Run Coverage # running tests
-        run: docker-compose run api coverage report manage.py
       - name: Run Test # running tests
         run: docker-compose run api python3 manage.py test
+      - name: Run Coverage # running tests
+        run: docker-compose run api coverage report --fail-under=85
 
   health-check-job-front-end: # health check job for testing and code formatting check
     name: front-end-health-check
