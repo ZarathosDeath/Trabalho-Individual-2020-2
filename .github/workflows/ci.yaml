@@ -87,7 +87,7 @@ jobs:
         docker push "gcr.io/${{ secrets.GKE_PROJECT_ID }}/api"
     - name: Get Cluster
       run: |-
-        cloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --region ${{ secrets.GKE_ZONE }}
+        gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --region ${{ secrets.GKE_ZONE }}
     - name: Deploy
       run: |-
         kubectl create deployment api --image=gcr.io/${{ secrets.GKE_PROJECT_ID }}/api:v1
