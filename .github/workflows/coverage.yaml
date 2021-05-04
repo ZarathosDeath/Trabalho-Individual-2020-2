@@ -13,15 +13,16 @@ jobs:
     - uses: actions/checkout@v2
     - name: build
       run: docker-compose up --build -d
-    - name: test api
+    - name: Api Test
       run: docker-compose run api coverage run manage.py test
-    - name: generate api xml
+    - name: Generate Api Coverage File
       run: docker-compose run api coverage xml
-    - name: test client
+    - name: Cleint Test
       run: docker-compose run app npm run test:unit:coverage
     - uses: codecov/codecov-action@v1
       with:
         # files: ${{github.workspace}}/api/coverage.xml, ${{github.workspace}}/client/test/jest/coverage/lcov.info
         directory: ${{github.workspace}}/**
+        token: ${{ secrets.CODECOV_TOKEN }}
         fail_ci_if_error: true
         verbose: true
