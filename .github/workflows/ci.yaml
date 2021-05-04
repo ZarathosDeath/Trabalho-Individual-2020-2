@@ -56,41 +56,41 @@ jobs:
       - name: Run Coverage # running tests
         run: docker-compose run app npm run test:unit:coverage
 
-  package-job:
-    name: package
-    needs: [health-check-job-front-end, health-check-job-back-end]
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-    - uses: google-github-actions/setup-gcloud@v0.2.0
-      with:
-        service_account_key: ${{ secrets.GKE_PROJECT }}
-        project_id: ${{ secrets.GKE_PROJECT_ID }}
-    - run: |-
-        gcloud --quiet auth configure-docker
-    - uses: google-github-actions/get-gke-credentials@v0.2.1
-      with:
-        cluster_name: ${{ secrets.GKE_CLUSTER }}
-        location: ${{ secrets.GKE_ZONE }}
-        credentials: ${{ secrets.GKE_PROJECT }}
-    - name: Build
-      run: |-
-        docker-compose build
-    - name: Tag Image
-      run: |-
-        docker tag trabalho-individual-2020-2_api "gcr.io/${{ secrets.GKE_PROJECT_ID }}/api"
-    - name: Publish
-      run: |-
-        docker push "gcr.io/${{ secrets.GKE_PROJECT_ID }}/api"
-    - name: Get Cluster
-      run: |-
-        gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --region ${{ secrets.GKE_ZONE }}
-    - name: Deploy
-      run: |-
-        kubectl create deployment api --image=gcr.io/${{ secrets.GKE_PROJECT_ID }}/api
-    - name: Check pods # checking pod list to see if they are running.
-      run: kubectl get pods
+  # package-job:
+  #   name: package
+  #   needs: [health-check-job-front-end, health-check-job-back-end]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: Checkout
+  #     uses: actions/checkout@v2
+  #   - uses: google-github-actions/setup-gcloud@v0.2.0
+  #     with:
+  #       service_account_key: ${{ secrets.GKE_PROJECT }}
+  #       project_id: ${{ secrets.GKE_PROJECT_ID }}
+  #   - run: |-
+  #       gcloud --quiet auth configure-docker
+  #   - uses: google-github-actions/get-gke-credentials@v0.2.1
+  #     with:
+  #       cluster_name: ${{ secrets.GKE_CLUSTER }}
+  #       location: ${{ secrets.GKE_ZONE }}
+  #       credentials: ${{ secrets.GKE_PROJECT }}
+  #   - name: Build
+  #     run: |-
+  #       docker-compose build
+  #   - name: Tag Image
+  #     run: |-
+  #       docker tag trabalho-individual-2020-2_api "gcr.io/${{ secrets.GKE_PROJECT_ID }}/api"
+  #   - name: Publish
+  #     run: |-
+  #       docker push "gcr.io/${{ secrets.GKE_PROJECT_ID }}/api"
+  #   - name: Get Cluster
+  #     run: |-
+  #       gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --region ${{ secrets.GKE_ZONE }}
+  #   - name: Deploy
+  #     run: |-
+  #       kubectl create deployment api --image=gcr.io/${{ secrets.GKE_PROJECT_ID }}/api
+  #   - name: Check pods # checking pod list to see if they are running.
+  #     run: kubectl get pods
     # Set up kustomize
     # - name: Set up Kustomize
     #   run: |-
