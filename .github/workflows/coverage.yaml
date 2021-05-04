@@ -17,7 +17,7 @@ jobs:
       run: docker-compose run api coverage run manage.py test
     - name: Generate Api Coverage File
       run: docker-compose run api coverage xml
-    - name: Cleint Test
+    - name: Client Test
       run: docker-compose run app npm run serve:test:coverage
     - uses: codecov/codecov-action@v1
       with:
