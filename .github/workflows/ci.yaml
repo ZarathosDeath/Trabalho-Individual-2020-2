@@ -11,53 +11,48 @@ on:
     branches:
       - master
 
-
-# three job definition
 jobs:
-  # health-check-job: # health check job for testing and code formatting check
-  #   runs-on: ubuntu-latest # os for running the job
-  #   # services:
-  #   #   postgres:
-  #   #     image: postgres
-  #   #     env:
-  #   #       POSTGRES_USER: postgres
-  #   #       POSTGRES_PASSWORD: postgres
-  #   #       POSTGRES_DB: github-actions
-  #   #     ports:
-  #   #       - 5432:5432 # exposing 5432 port for application to use
-  #   #     options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: build db and api # checking our the code at current commit that triggers the workflow
-  #       run: docker-compose up --build -d db api
-  #     - name: Cache dependency # caching dependency will make our build faster.
-  #       uses: actions/cache@v2
-  #       with:
-  #         path: ~/.cache/pip
-  #         key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-  #         restore-keys: |
-  #           ${{ runner.os }}-pip-
-  #     - name: Check Syntax # check code formatting
-  #       run: docker-compose run api pycodestyle --statistics .
-  #     - name: Run Migrations # run migrations to create table in side car db container
-  #       run: docker-compose run api python3 manage.py migrate
-  #     - name: Run Test # running tests
-  #       run: docker-compose run api python3 manage.py test
+  health-check-job(back-end): # health check job for testing and code formatting check
+    runs-on: ubuntu-latest # os for running the job
+    steps:
+      - uses: actions/checkout@v2
+      - name: build db and api # checking our the code at current commit that triggers the workflow
+        run: docker-compose up --build -d db api
+      - name: Cache dependency # caching dependency will make our build faster.
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: Check Syntax # check code formatting
+        run: docker-compose run api pycodestyle --statistics .
+      - name: Run Migrations # run migrations to create table in side car db container
+        run: docker-compose run api python3 manage.py migrate
+      - name: Run Test # running tests
+        run: docker-compose run api coverage report --fail-under=80
+      - name: Run Coverage # running tests
+        run: docker-compose run api python3 manage.py test
 
-  # package-job: # package job for building and publishing docker images
-  #   runs-on: ubuntu-latest
-  #   # needs: [health-check-job] # will be fired if and only if health-check-job is passed.
-  #   if: ${{ github.event_name == 'push' }} # will be fired if the trigger event is a push event.
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: Build & Publish Image # we are using a public GitHub Action to build and publish docker image to our GCR registry.
-  #       uses: docker/build-push-action@v1
-  #       with:
-  #         username: _json_key # default for gcr.io
-  #         password: ${{ secrets.GKE_PASSWORD }} # service account file to be set as secret
-  #         registry: gcr.io # gcr registry domain
-  #         repository: ${{secrets.GKE_PROJECT_ID}}/trabalho-individual-2020-2_api # GKE_PROJECT is out GCP Project id to be set as secret.
-  #         tag_with_sha: true # this will tag our image with commit id. For example our image our be gcr.io/project-id/github-django-actions/app:sha-7865423 where 7865423 is the short sha of our commit.
+  health-check-job(front-end): # health check job for testing and code formatting check
+    runs-on: ubuntu-latest # os for running the job
+    steps:
+      - uses: actions/checkout@v2
+      - name: build client # checking our the code at current commit that triggers the workflow
+        run: docker-compose up --build -d client
+      - name: Cache dependency # caching dependency will make our build faster.
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: Check Syntax # check code formatting
+        run: docker-compose run client yarn lint
+      - name: Run Test # running tests
+        run: docker-compose run client npm run test:unit:ci
+      - name: Run Test # running tests
+        run: docker-compose run client npm run test:unit:coverage
 
   package-job:
     name: package
