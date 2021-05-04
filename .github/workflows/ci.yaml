@@ -30,9 +30,9 @@ jobs:
         run: docker-compose run api pycodestyle --statistics .
       - name: Run Migrations # run migrations to create table in side car db container
         run: docker-compose run api python3 manage.py migrate
-      - name: Run Test # running tests
-        run: docker-compose run api coverage report --fail-under=80
       - name: Run Coverage # running tests
+        run: docker-compose run api coverage run manage.py test
+      - name: Run Test # running tests
         run: docker-compose run api python3 manage.py test
 
   health-check-job-front-end: # health check job for testing and code formatting check
@@ -53,7 +53,7 @@ jobs:
         run: docker-compose run app yarn lint
       - name: Run Test # running tests
         run: docker-compose run app npm run test:unit:ci
-      - name: Run Test # running tests
+      - name: Run Coverage # running tests
         run: docker-compose run app npm run test:unit:coverage
 
   package-job:
