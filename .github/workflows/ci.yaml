@@ -58,6 +58,7 @@ jobs:
 
   package-job:
     name: package
+    needs: [health-check-job-front-end, health-check-job-back-end]
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
