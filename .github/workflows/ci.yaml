@@ -85,19 +85,27 @@ jobs:
     - name: Publish
       run: |-
         docker push "gcr.io/${{ secrets.GKE_PROJECT_ID }}/api"
-    # Set up kustomize
-    - name: Set up Kustomize
+    - name: Get Cluster
       run: |-
-        curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
-        chmod u+x ./kustomize
-
-    # Deploy the Docker image to the GKE cluster
+        cloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --region ${{ secrets.GKE_ZONE }}
     - name: Deploy
       run: |-
-        kustomize edit set image gcr.io/PROJECT_ID/IMAGE:TAG=gcr.io/${{ secrets.GKE_PROJECT_ID }}/api
-        kustomize build . | kubectl apply -f -
-        kubectl rollout status deployment/api
-        kubectl get services -o wide
+        kubectl create deployment api --image=gcr.io/${{ secrets.GKE_PROJECT_ID }}/api:v1
+    - name: Check pods # checking pod list to see if they are running.
+      run: kubectl get pods
+    # Set up kustomize
+    # - name: Set up Kustomize
+    #   run: |-
+    #     curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
+    #     chmod u+x ./kustomize
+
+    # # Deploy the Docker image to the GKE cluster
+    # - name: Deploy
+    #   run: |-
+    #     kustomize edit set image gcr.io/PROJECT_ID/IMAGE:TAG=gcr.io/${{ secrets.GKE_PROJECT_ID }}/api
+    #     kustomize build . | kubectl apply -f -
+    #     kubectl rollout status deployment/api
+    #     kubectl get services -o wide
 
   # deploy-job: # deploy job is for deploying our code to google cloud cluster.
   #   runs-on: ubuntu-latest
