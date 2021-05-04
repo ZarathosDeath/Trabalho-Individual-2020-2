@@ -90,7 +90,7 @@ jobs:
         gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --region ${{ secrets.GKE_ZONE }}
     - name: Deploy
       run: |-
-        kubectl create deployment api --image=gcr.io/${{ secrets.GKE_PROJECT_ID }}/api:v1
+        kubectl create deployment api --image=gcr.io/${{ secrets.GKE_PROJECT_ID }}/api
     - name: Check pods # checking pod list to see if they are running.
       run: kubectl get pods
     # Set up kustomize
