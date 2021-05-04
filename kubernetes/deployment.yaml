@@ -15,7 +15,7 @@ spec:
         run: api
     spec:
       containers:
-      - image: gcr.io/<google-project-id>/api:latest
+      - image: gcr.io/sacred-evening-312303/api
         name: api
         ports:
         - containerPort: 8000
