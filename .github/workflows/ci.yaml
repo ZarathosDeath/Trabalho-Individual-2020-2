@@ -12,7 +12,7 @@ on:
       - master
 
 jobs:
-  health-check-job(back-end): # health check job for testing and code formatting check
+  health-check-job-back-end: # health check job for testing and code formatting check
     name: back-end-health-check
     runs-on: ubuntu-latest # os for running the job
     steps:
@@ -35,7 +35,7 @@ jobs:
       - name: Run Coverage # running tests
         run: docker-compose run api python3 manage.py test
 
-  health-check-job(front-end): # health check job for testing and code formatting check
+  health-check-job-front-end: # health check job for testing and code formatting check
     name: front-end-health-check
     runs-on: ubuntu-latest # os for running the job
     steps:
