@@ -18,7 +18,7 @@ jobs:
     - name: Generate Api Coverage File
       run: docker-compose run api coverage xml
     - name: Client Test
-      run: docker-compose run app npm run serve:test:coverage
+      run: docker-compose run app npm run test:unit:coverage
     - uses: codecov/codecov-action@v1
       with:
         # files: ${{github.workspace}}/api/coverage.xml, ${{github.workspace}}/client/test/jest/coverage/lcov.info
