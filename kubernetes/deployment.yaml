@@ -100,7 +100,7 @@ spec:
     spec:
       containers:
         - image: >-
-            gcr.io/sacred-evening-312303/api
+            gcr.io/sacred-evening-312303/github.com/zarathosdeath/trabalho-individual-2020-2
           imagePullPolicy: Always
           name: api
 ---
