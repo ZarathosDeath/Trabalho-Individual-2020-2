@@ -2,7 +2,7 @@ name: Deploy services to heroku.
 
 on:
   workflow_run:
-    workflows: ["Django CI/CD Workflow"]
+    workflows: ["App health-check"]
     types: [completed]
     branches: [master]
 jobs:
