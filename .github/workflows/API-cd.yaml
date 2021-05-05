@@ -1,4 +1,4 @@
-name: Deploy API to heroku.
+name: Deploy services to heroku.
 
 on:
   workflow_run:
@@ -18,7 +18,7 @@ jobs:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_app_name: ${{ secrets.HEROKU_APP_NAME_API }}
           dockerfile_directory: ./api
-          dockerfile_name: API.Dockerfile
+          dockerfile_name: API.PROD.Dockerfile
           docker_options: "--no-cache"
           process_type: web
       - name: Build, Publish and Deploy Frontend.

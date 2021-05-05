@@ -1,4 +1,4 @@
-name: Django CI/CD Workflow
+name: App health-check
 
 # triggers for our workflow
 on:
