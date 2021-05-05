@@ -1,7 +1,7 @@
 FROM python:3
 # Setting PYTHONUNBUFFERED to a non empty value ensures that the python output is sent straight to terminal (e.g. your container log) without being first buffered
 ENV PYTHONUNBUFFERED=1
-WORKDIR /api
+WORKDIR /app
 
 RUN apt-get update && apt-get -y dist-upgrade
 RUN apt install -y netcat
