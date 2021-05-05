@@ -1,7 +1,9 @@
 name: Deploy API to heroku.
 
 on:
-  push:
+  workflow_run:
+    workflows: ["Django CI/CD Workflow"]
+    types: [completed]
     branches: [master]
 jobs:
   build:
@@ -9,7 +11,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Build, Publish and Deploy.
+      - name: Build, Publish and Deploy Backend.
         uses: gonuit/heroku-docker-deploy@v1.3.2 
         with:
           email: ${{ secrets.HEROKU_EMAIL }}
@@ -17,5 +19,15 @@ jobs:
           heroku_app_name: ${{ secrets.HEROKU_APP_NAME_API }}
           dockerfile_directory: ./api
           dockerfile_name: API.Dockerfile
+          docker_options: "--no-cache"
+          process_type: web
+      - name: Build, Publish and Deploy Frontend.
+        uses: gonuit/heroku-docker-deploy@v1.3.2 
+        with:
+          email: ${{ secrets.HEROKU_EMAIL }}
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ${{ secrets.HEROKU_APP_NAME_API_FRONTEND }}
+          dockerfile_directory: ./client
+          dockerfile_name: Dockerfile
           docker_options: "--no-cache"
           process_type: web
