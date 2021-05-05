@@ -7,6 +7,7 @@
   "private": true,
   "scripts": {
     "build": "quasar build",
+    "start": "node server.js",
     "lint": "eslint --ext .js,.vue ./",
     "test": "echo \"See package.json => scripts for available tests.\" && exit 0",
     "test:unit": "jest --updateSnapshot",
